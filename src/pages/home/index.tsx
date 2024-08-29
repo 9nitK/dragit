@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Doc } from "./types";
 import DocCard from "./components/DocCard";
 import { SimpleGrid, useDisclosure } from "@chakra-ui/react";
-import { debounce, swapPositionsAndReturnNewArray } from "../../utils";
+import { debounce } from "../../utils";
 import DocModal from "./components/DocModal";
 
 const Home = () => {
@@ -45,11 +45,10 @@ const Home = () => {
     }
     const dragIndexInArray = docData.indexOf(dragCard);
     const hoverIndexInArray = docData.indexOf(hoverCard);
-    const newDocData = swapPositionsAndReturnNewArray(
-      docData,
-      dragIndexInArray,
-      hoverIndexInArray
-    );
+
+    let newDocData = [...docData];
+    newDocData.splice(dragIndexInArray, 1);
+    newDocData.splice(hoverIndexInArray, 0, dragCard);
 
     setDocData(newDocData);
 

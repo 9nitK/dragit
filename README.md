@@ -1,4 +1,4 @@
-# 🚀 Zania
+# 🚀 Drag It
 
 [![Live Demo](https://img.shields.io/badge/Demo-Live-brightgreen)](https://zania.vercel.app/)
 

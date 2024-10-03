@@ -9,13 +9,26 @@ import {
 import { useDrag, useDrop } from "react-dnd";
 import { Doc } from "../types";
 
+/**
+ * Props for the DocCard component
+ * @interface DocCardProps
+ * @property {Doc} doc - The document object to display
+ * @property {function} updateDocs - Function to update the order of documents
+ * @property {function} onClick - Function to handle click events on the card
+ */
 interface DocCardProps {
   doc: Doc;
   updateDocs: (dragId: string, hoverId: string) => void;
   onClick: () => void;
 }
 
+/**
+ * DocCard component - Displays a draggable card for a document
+ * @param {DocCardProps} props - The props for the component
+ * @returns {JSX.Element} The rendered DocCard component
+ */
 const DocCard = ({ doc, updateDocs, onClick }: DocCardProps) => {
+  // Set up drag functionality
   const [{ isDragging }, drag] = useDrag({
     type: "DOC",
     item: { id: doc.id },
@@ -24,6 +37,11 @@ const DocCard = ({ doc, updateDocs, onClick }: DocCardProps) => {
     }),
   });
 
+  /**
+   * Handles the hover event when dragging a card over another
+   * @param {Object} item - The item being dragged
+   * @param {string} item.id - The ID of the dragged item
+   */
   const hoverItem = (item: { id: string }) => {
     const dragId = item.id;
     const hoverId = doc.id;
@@ -35,6 +53,7 @@ const DocCard = ({ doc, updateDocs, onClick }: DocCardProps) => {
     updateDocs(dragId, hoverId);
   };
 
+  // Set up drop functionality
   const [_collectedProps, drop] = useDrop({
     accept: "DOC",
     hover: hoverItem,
@@ -63,4 +82,5 @@ const DocCard = ({ doc, updateDocs, onClick }: DocCardProps) => {
     </Card>
   );
 };
+
 export default DocCard;

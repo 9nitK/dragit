@@ -5,11 +5,21 @@ import { SimpleGrid, useDisclosure } from "@chakra-ui/react";
 import { debounce } from "../../utils";
 import DocModal from "./components/DocModal";
 
+/**
+ * Home component
+ * Displays a grid of document cards and handles document data management
+ */
 const Home = () => {
+  // State for storing document data
   const [docData, setDocData] = useState<Doc[]>([]);
+  // Chakra UI hook for managing modal state
   const { isOpen, onOpen, onClose } = useDisclosure();
+  // State for storing the currently selected document
   const [selectedDoc, setSelectedDoc] = useState<Doc>();
 
+  /**
+   * Fetches document data from the server
+   */
   const getDocData = async () => {
     try {
       const response = await fetch(`/docs`);
@@ -20,6 +30,10 @@ const Home = () => {
     }
   };
 
+  /**
+   * Saves updated document data to the server
+   * @param newDocData - Updated array of documents
+   */
   const saveDocData = async (newDocData: Doc[]) => {
     try {
       await fetch(`/docs`, {
@@ -31,11 +45,16 @@ const Home = () => {
     }
   };
 
+  // Effect hook to fetch initial document data on component mount
   useEffect(() => {
-    // Getting the initial data
     getDocData();
   }, []);
 
+  /**
+   * Updates the order of documents when a card is dragged and dropped
+   * @param dragId - ID of the dragged document
+   * @param hoverId - ID of the document being hovered over
+   */
   const updateDocs = (dragId: string, hoverId: string) => {
     const dragCard = docData.find((doc) => doc.id === dragId);
     const hoverCard = docData.find((doc) => doc.id === hoverId);
@@ -52,6 +71,7 @@ const Home = () => {
 
     setDocData(newDocData);
 
+    // Debounce the save operation to reduce server calls
     debounce(() => {
       saveDocData(newDocData);
     }, 1000)();
